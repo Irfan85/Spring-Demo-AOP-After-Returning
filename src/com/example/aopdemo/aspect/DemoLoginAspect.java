@@ -26,10 +26,19 @@ public class DemoLoginAspect {
 		String method = joinPoint.getSignature().toShortString();
 		System.out.println("\n ====> Executing @AfterReturning on method: " + method);
 
+		// Post-processing the data
+		convertAccountNamesToUppercase(result);
+
 		System.out.println("\n ====> The result is: " + result);
     }
     
-    // Reusing a pointcut expression that was declared before 
+    private void convertAccountNamesToUppercase(List<Account> result) {
+	for(Account account : result) {
+	    account.setName(account.getName().toUpperCase());
+	}
+    }
+
+	// Reusing a pointcut expression that was declared before 
     // Works for all methods in a specific package located in any class with any parameter(s)
     @Before("com.example.aopdemo.aspect.MyAopExpressions.forDAOPackageNoGetterSetter()")
     public void beforeAnyMethodOfAPackage(JoinPoint joinpoint) {
